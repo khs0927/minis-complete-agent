@@ -1,0 +1,9 @@
+[project]
+name = "minis-complete-agent"
+version = "1.0.0"
+description = "Evidence-gated, autonomous multi-model AI agent for Minis/iOS"
+requires-python = ">=3.12"
+dependencies = ["requests"]
+
+[project.scripts]
+minis-complete = "orchestrator:main"
