@@ -2,8 +2,11 @@
 name = "minis-complete-agent"
 version = "1.0.0"
 description = "Evidence-gated, autonomous multi-model AI agent for Minis/iOS"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = ["requests"]
 
 [project.scripts]
 minis-complete = "orchestrator:main"
+
+[tool.setuptools]
+py-modules = ["orchestrator"]
