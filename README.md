@@ -146,3 +146,29 @@ minis-complete-agent status  # CLI shortcut
 ## License
 
 MIT
+
+
+## Integrated Orchestrator
+
+The current implementation provides a safe, inspectable mission engine in `engine.py`. It discovers installed skills from `/home/ubuntu/skills/*/SKILL.md`, reads available connector metadata without exposing secrets, creates bounded subagent tasks, supports preview mode, applies default-deny approval for high-risk work, collects evidence, computes an independent verification report, and writes redacted JSONL traces under `.minis/`.
+
+```bash
+python3 orchestrator.py status
+python3 orchestrator.py plan "research current AI news" --workstream research --risk medium
+python3 orchestrator.py preview "run code" --workstream code
+python3 orchestrator.py run "run code" --workstream code
+python3 orchestrator.py run "publish result" --workstream commerce --risk critical
+python3 orchestrator.py run "publish result" --workstream commerce --risk critical --confirm
+python3 orchestrator.py trace <mission-id>
+python3 -m pytest -q
+```
+
+The registry is intentionally **capability-first, not privilege-first**: all discovered skills are searchable, but only the capabilities required by a mission are passed to its subagent. OAuth and external connector actions remain blocked by default until an explicit connector UID and approved delegation adapter are configured. This prevents the orchestrator from copying or exposing connector credentials.
+
+### Execution states
+
+Missions move through `previewed`, `awaiting_approval`, `running`, `verified`, `passed`, or `repair_required`. High-risk actions such as commerce, device, automation, and external publishing require confirmation before execution. A failed verification returns missing gates and recommendations instead of silently marking the mission complete.
+
+### Validation
+
+Run `python3 -m pytest -q` for the regression suite, `python3 -m compileall -q orchestrator.py engine.py` for syntax validation, and `python3 -m pip install --dry-run .` for package validation.
