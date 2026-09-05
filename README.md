@@ -95,7 +95,7 @@ The `complete-agent` MCP server (stdangège transport) exposes 4 tools:
 | `complete_agent_verify` | Evidence-ignored verification score |
 | `complete_agent_trace` | Redacted, hash-based execution trace |
 
-For compatibility the `orchestrator` server is at `""/var/minis/workspace/orchestrator/mcp_server_v2.py"` and exposes `call_orchestrator`.
+For compatibility the `orchestrator` server is at `"/var/minis/workspace/orchestrator/mcp_server_v2.py"` (on-device path on the Minis host, not in this repo) and exposes `call_orchestrator`.
 
 ---
 
@@ -133,8 +133,8 @@ User question
 ```
 python3 orchestrator.py status  # environment audit
 python3 orchestrator.py plan "프롬프트" --save
-python3 -m unittest discover -s tests -v
-minis-complete-agent status  # CLI shortcut
+python3 -m pytest test_orchestrator.py -q
+minis-complete status  # CLI shortcut (pyproject [project.scripts])
 ```
 
 ## Status
@@ -160,7 +160,7 @@ python3 orchestrator.py run "run code" --workstream code
 python3 orchestrator.py run "publish result" --workstream commerce --risk critical
 python3 orchestrator.py run "publish result" --workstream commerce --risk critical --confirm
 python3 orchestrator.py trace <mission-id>
-python3 -m pytest -q
+python3 -m pytest test_orchestrator.py -q
 ```
 
 The registry is intentionally **capability-first, not privilege-first**: all discovered skills are searchable, but only the capabilities required by a mission are passed to its subagent. OAuth and external connector actions remain blocked by default until an explicit connector UID and approved delegation adapter are configured. This prevents the orchestrator from copying or exposing connector credentials.
@@ -171,4 +171,4 @@ Missions move through `previewed`, `awaiting_approval`, `running`, `verified`, `
 
 ### Validation
 
-Run `python3 -m pytest -q` for the regression suite, `python3 -m compileall -q orchestrator.py engine.py` for syntax validation, and `python3 -m pip install --dry-run .` for package validation.
+Run `python3 -m pytest test_orchestrator.py -q` for the regression suite (needs `pip install -e ".[test]"` first), `python3 -m compileall -q orchestrator.py engine.py` for syntax validation.

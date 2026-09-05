@@ -8,5 +8,8 @@ dependencies = ["requests"]
 [project.scripts]
 minis-complete = "orchestrator:main"
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [tool.setuptools]
 py-modules = ["orchestrator", "engine"]
